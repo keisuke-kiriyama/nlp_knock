@@ -21,24 +21,21 @@ from collections import OrderedDict
 #     else:
 #         print('error')
 
+# if __name__ == '__main__':
+#     get_template()
+
 
 def get_template():
-    dict = OrderedDict()
-    text = extract_from_json('イギリス')
-    base_info = re.search(u'(?<=\{\{基礎情報)(.+?)(?=\}\}\n)', text, re.DOTALL)
-    pattern = re.compile(u'\|(.+?) = (.+?)(?<!<br/>)\n')
-    info_list = pattern.findall(base_info.group(1))
-    emphasis_pattern = re.compile(r"'{2,5}(.+)'{2,5}")
-    if info_list:
-        for info in info_list:
-            emphasis = emphasis_pattern.sub(r'', info[1])
-        
-            # emphasis_pattern.sub(r"\2", info[1])
-            # print(info[1])
-            # dict[info[0]] = info[1]
+    temp_dict = {}
+    lines = re.split(r"\n[\|}]", extract_from_json(u"イギリス"))
+    for line in lines:
+        temp_line = re.search("^(.*?)\s=\s(.*)", line, re.S)
+        if temp_line is not None:
+            temp_dict[temp_line.group(1)] = re.sub(r"'{2,5}", r"", temp_line.group(2))
 
-
-
+    for k, v in sorted(temp_dict.items(), key=lambda x: x[1]):
+        print(k, v)
 
 if __name__ == '__main__':
     get_template()
+
