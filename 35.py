@@ -26,7 +26,22 @@ def read_mecab_data(mecab_file):
             return parsed_list
 
 
+def get_noun_concatenation(parsed_list):
+    noun_phrase_list = []
+    temp =[]
+    for i in range(len(parsed_list) - 2):
+        if parsed_list[i]['pos'] =='名詞':
+            temp.append(parsed_list[i]['surface'])
+        else:
+            if len(temp) > 1:
+                noun_phrase_list.append(temp)
+                temp =[]
+            else:
+                temp =[]
+    return noun_phrase_list
 
 
-
-parsed_list = read_mecab_data('neko.txt.mecab')
+if __name__ == '__main__':
+    parsed_list = read_mecab_data('neko.txt.mecab')
+    noun_phrase_list = get_noun_concatenation(parsed_list)
+    print(noun_phrase_list)

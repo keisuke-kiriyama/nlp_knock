@@ -26,7 +26,19 @@ def read_mecab_data(mecab_file):
             return parsed_list
 
 
+def get_nouns_of(parsed_list):
+    noun_phrase_list = []
+    for i in range(len(parsed_list) - 2):
+        first_noun = parsed_list[i]
+        of = parsed_list[i + 1]
+        second_noun = parsed_list[i + 2]
+        if first_noun['pos'] == '名詞' and of['surface'] == 'の' and second_noun['pos'] == '名詞':
+            noun_phrase = first_noun['surface'] + of['surface'] + second_noun['surface']
+            noun_phrase_list.append(noun_phrase)
+    return noun_phrase_list
 
 
-
-parsed_list = read_mecab_data('neko.txt.mecab')
+if __name__ == '__main__':
+    parsed_list = read_mecab_data('neko.txt.mecab')
+    noun_phrase_list = get_nouns_of(parsed_list)
+    print(noun_phrase_list)

@@ -26,7 +26,15 @@ def read_mecab_data(mecab_file):
             return parsed_list
 
 
+def get_noun_connection(parsed_list):
+    verb_list = []
+    for element in parsed_list:
+        if element['pos1'] == 'サ変接続':
+            verb_list.append(element['surface'])
+    return verb_list
 
 
-
-parsed_list = read_mecab_data('neko.txt.mecab')
+if __name__ == '__main__':
+    parsed_list = read_mecab_data('neko.txt.mecab')
+    noun_list = get_noun_connection(parsed_list)
+    print(noun_list)
